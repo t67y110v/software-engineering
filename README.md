@@ -3,7 +3,8 @@
 
 Подход к разработке  - Agile 
 
-Таск менеджер  - github actions 
+Таск менеджер  - github projects
+
 
 
 # BACKEND 
