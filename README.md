@@ -1,4 +1,4 @@
-#SOFTWARE ENGINEERING COURSE
+# SOFTWARE ENGINEERING COURSE
 Стиль написания кода - camelCase
 Подход к разработке  - Agile 
 Таск менеджер  - github actions 
