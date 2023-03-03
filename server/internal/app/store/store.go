@@ -1,5 +1,5 @@
 package store
 
-type AllStore interface {
-	Everythink() AllStoreRepository
+type PostgresStore interface {
+	UserRepository() PostgresStoreRepository
 }

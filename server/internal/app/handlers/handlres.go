@@ -7,10 +7,10 @@ import (
 
 type Handlres struct {
 	logger logging.Logger
-	store  store.AllStore
+	store  store.PostgresStore
 }
 
-func NewHandlres(store store.AllStore, logger logging.Logger) *Handlres {
+func NewHandlres(store store.PostgresStore, logger logging.Logger) *Handlres {
 	return &Handlres{
 		store:  store,
 		logger: logger,

@@ -38,7 +38,7 @@ func (h *Handlres) RegisterHandler() fiber.Handler {
 			Name:        data["name"],
 			SeccondName: data["seccondname"],
 		}
-		if err = h.store.Everythink().Create(u); err != nil {
+		if err = h.store.UserRepository().Create(u); err != nil {
 			return err
 		}
 
@@ -64,7 +64,7 @@ func (h *Handlres) FiberLogin() fiber.Handler {
 			h.logger.Warningf("handle login, status :%d, error :%e", fiber.StatusBadRequest, err)
 
 		}
-		u, err := h.store.Everythink().FindByEmail(req.Email)
+		u, err := h.store.UserRepository().FindByEmail(req.Email)
 		if err != nil {
 			return err
 		}
@@ -102,7 +102,7 @@ func (h *Handlres) Login() fiber.Handler {
 			return err
 		}
 		//u := &model.User{}
-		u, err := h.store.Everythink().FindByEmail(data["email"])
+		u, err := h.store.UserRepository().FindByEmail(data["email"])
 		if err != nil {
 			return err
 		}
@@ -168,7 +168,7 @@ func (h *Handlres) User() fiber.Handler {
 			})
 		}
 		id := float64(claims["id"].(float64))
-		u, err := h.store.Everythink().FindByID(strconv.Itoa(int(id)))
+		u, err := h.store.UserRepository().FindByID(strconv.Itoa(int(id)))
 		if err != nil {
 			return err
 		}

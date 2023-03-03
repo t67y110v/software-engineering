@@ -7,11 +7,11 @@ import (
 	"github.com/t67y110v/software-engineering/internal/app/store"
 )
 
-type AllStoreRepository struct {
+type PostgresStoreRepository struct {
 	store *Store
 }
 
-func (r *AllStoreRepository) Create(u *model.User) error {
+func (r *PostgresStoreRepository) Create(u *model.User) error {
 	if err := u.BeforeCreate(); err != nil {
 		return err
 	}
@@ -24,7 +24,7 @@ func (r *AllStoreRepository) Create(u *model.User) error {
 	).Scan(&u.ID)
 }
 
-func (r *AllStoreRepository) FindByEmail(email string) (*model.User, error) {
+func (r *PostgresStoreRepository) FindByEmail(email string) (*model.User, error) {
 	u := &model.User{}
 	if err := r.store.db.QueryRow(
 		"SELECT id, email, encrypted_password, isadmin, username, seccondname FROM users WHERE email = $1",
@@ -47,7 +47,7 @@ func (r *AllStoreRepository) FindByEmail(email string) (*model.User, error) {
 
 }
 
-func (r *AllStoreRepository) FindByID(ID string) (*model.User, error) {
+func (r *PostgresStoreRepository) FindByID(ID string) (*model.User, error) {
 	u := &model.User{}
 	if err := r.store.db.QueryRow(
 		"SELECT id, email, encrypted_password, isadmin, username, seccondname FROM users WHERE id = $1",

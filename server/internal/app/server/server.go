@@ -17,12 +17,12 @@ import (
 type server struct {
 	router   *fiber.App
 	logger   logging.Logger
-	store    store.AllStore
+	store    store.PostgresStore
 	config   *Config
 	handlers *handlers.Handlres
 }
 
-func newServer(store store.AllStore, config *Config, log logging.Logger) *server {
+func newServer(store store.PostgresStore, config *Config, log logging.Logger) *server {
 	s := &server{
 		router:   fiber.New(fiber.Config{ServerHeader: "software engineering course api", AppName: "Api v1.0.1"}),
 		logger:   log,

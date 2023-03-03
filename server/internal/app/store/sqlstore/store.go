@@ -10,8 +10,8 @@ import (
 )
 
 type Store struct {
-	db                 *sql.DB
-	allStoreRepository *AllStoreRepository
+	db                      *sql.DB
+	postgresStoreRepository *PostgresStoreRepository
 }
 
 func New(db *sql.DB) *Store {
@@ -22,13 +22,13 @@ func New(db *sql.DB) *Store {
 	}
 }
 
-func (s *Store) Everythink() store.AllStoreRepository {
-	if s.allStoreRepository != nil {
-		return s.allStoreRepository
+func (s *Store) UserRepository() store.PostgresStoreRepository {
+	if s.postgresStoreRepository != nil {
+		return s.postgresStoreRepository
 	}
 
-	s.allStoreRepository = &AllStoreRepository{
+	s.postgresStoreRepository = &PostgresStoreRepository{
 		store: s,
 	}
-	return s.allStoreRepository
+	return s.postgresStoreRepository
 }
