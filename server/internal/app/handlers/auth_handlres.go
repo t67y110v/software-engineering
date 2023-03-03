@@ -4,6 +4,8 @@ import (
 	//"html/template"
 
 	"bytes"
+	"fmt"
+
 	//"fmt"
 	"strconv"
 
@@ -22,13 +24,16 @@ import (
 func (h *Handlres) RegisterHandler() fiber.Handler {
 
 	return func(c *fiber.Ctx) error {
+
 		var data map[string]string
 
 		err := c.BodyParser(&data)
+		fmt.Println(err)
 		if err != nil {
 			return err
 
 		}
+
 		u := &model.User{
 			Email:       data["email"],
 			Password:    data["password"],
