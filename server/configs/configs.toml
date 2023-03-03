@@ -1,0 +1,4 @@
+bind_addr=":4000"
+log_level="debug"
+
+database_url="user=postgres password=p02tgre2 dbname=web sslmode=disable"
