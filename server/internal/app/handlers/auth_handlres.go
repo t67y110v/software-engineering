@@ -4,7 +4,6 @@ import (
 	//"html/template"
 
 	"bytes"
-	"fmt"
 
 	//"fmt"
 	"strconv"
@@ -28,7 +27,6 @@ func (h *Handlres) RegisterHandler() fiber.Handler {
 		var data map[string]string
 
 		err := c.BodyParser(&data)
-		fmt.Println(err)
 		if err != nil {
 			return err
 
