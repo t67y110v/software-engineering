@@ -15,18 +15,31 @@ import (
 )
 
 func Start(config *Config) error {
+
+	ctx := context.TODO()
+
 	pgdb, err := newPostgresDB(config.PostgresDatabaseURL)
 	if err != nil {
 		return err
 	}
+
 	defer pgdb.Close()
 
-	mgdb, err := newMongoDB(config.MongoDatabaseURL)
+	mgdb, err := newMongoDB(config.MongoDatabaseURL, ctx)
+	if err != nil {
+		return err
+	}
+
+	defer mgdb.Disconnect(ctx)
 
 	pgStore := store.NewPostgresDB(pgdb)
+
 	mgStore := nosqlstore.NewMongoDB(mgdb)
+
 	logger := logging.GetLogger()
+
 	server := newServer(pgStore, mgStore, config, logger)
+
 	//StartServerWithGracefulShutdown(server, config.BindAddr)
 	return server.router.Listen(config.BindAddr)
 }
@@ -43,8 +56,9 @@ func newPostgresDB(postgresDatabaseURL string) (*sql.DB, error) {
 	return db, nil
 }
 
-func newMongoDB(mongoDatabaseURL string) (*mongo.Client, error) {
-	ctx := context.TODO()
+func newMongoDB(mongoDatabaseURL string, ctx context.Context) (*mongo.Client, error) {
+
+	log.Printf("Database initialization: %s\n", mongoDatabaseURL)
 	clientOptions := options.Client().ApplyURI(mongoDatabaseURL)
 
 	client, err := mongo.Connect(ctx, clientOptions)

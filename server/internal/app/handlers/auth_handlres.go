@@ -20,25 +20,33 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-func (h *Handlres) RegisterHandler() fiber.Handler {
+func (h *Handlres) Register() fiber.Handler {
 
 	return func(c *fiber.Ctx) error {
 
-		var data map[string]string
+		type request struct {
+			Email       string `json:"email"`
+			Password    string `json:"password"`
+			Name        string `json:"name"`
+			SeccondName string `json:"seccond_name"`
+		}
 
-		err := c.BodyParser(&data)
-		if err != nil {
-			return err
+		req := &request{}
 
+		reader := bytes.NewReader(c.Body())
+
+		if err := json.NewDecoder(reader).Decode(req); err != nil {
+			h.logger.Warningf("handle register, status :%d, error :%e", fiber.StatusBadRequest, err)
 		}
 
 		u := &model.User{
-			Email:       data["email"],
-			Password:    data["password"],
-			Name:        data["name"],
-			SeccondName: data["seccondname"],
+			Email:       req.Email,
+			Password:    req.Password,
+			Name:        req.Name,
+			SeccondName: req.SeccondName,
 		}
-		if err = h.pgStore.UserRepository().Create(u); err != nil {
+
+		if err := h.pgStore.UserRepository().Create(u); err != nil {
 			return err
 		}
 
@@ -50,7 +58,7 @@ func (h *Handlres) RegisterHandler() fiber.Handler {
 
 }
 
-func (h *Handlres) FiberLogin() fiber.Handler {
+func (h *Handlres) Login() fiber.Handler {
 
 	return func(c *fiber.Ctx) error {
 
@@ -58,29 +66,39 @@ func (h *Handlres) FiberLogin() fiber.Handler {
 			Email    string `json:"email"`
 			Password string `json:"password"`
 		}
+
 		req := &request{}
+
 		reader := bytes.NewReader(c.Body())
+
 		if err := json.NewDecoder(reader).Decode(req); err != nil {
 			h.logger.Warningf("handle login, status :%d, error :%e", fiber.StatusBadRequest, err)
-
 		}
 
 		u, err := h.pgStore.UserRepository().FindByEmail(req.Email)
 		if err != nil {
 			return err
 		}
+
 		if u.ID == 0 {
 			c.Status(fiber.StatusNotFound)
 			return c.JSON(fiber.Map{
 				"message": "user not found",
 			})
 		}
-		secret := "secret"
+
+		secret := "11we$*9sd*(@!)"
+
 		minutesCount, _ := strconv.Atoi("15")
+
 		claims := jwt.MapClaims{}
+
 		claims["exp"] = time.Now().Add(time.Minute * time.Duration(minutesCount)).Unix()
+
 		claims["id"] = u.ID
+
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
 		t, err := token.SignedString([]byte(secret))
 		if err != nil {
 			return err
@@ -95,80 +113,41 @@ func (h *Handlres) FiberLogin() fiber.Handler {
 
 }
 
-func (h *Handlres) Login() fiber.Handler {
+func (h *Handlres) CheckJWT() fiber.Handler {
 
 	return func(c *fiber.Ctx) error {
-		var data map[string]string
-		if err := c.BodyParser(&data); err != nil {
-			return err
-		}
-		//u := &model.User{}
-		u, err := h.pgStore.UserRepository().FindByEmail(data["email"])
-		if err != nil {
-			return err
-		}
-		if u.ID == 0 {
-			c.Status(fiber.StatusNotFound)
-			return c.JSON(fiber.Map{
-				"message": "user not found",
-			})
-		}
 
-		claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
-			Issuer:    strconv.Itoa(int(u.ID)),
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24)),
-		})
-		token, err := claims.SignedString([]byte("secret"))
-
-		//fmt.Println(token)
-
-		if err != nil {
-			c.Status(fiber.StatusInternalServerError)
-			return c.JSON(fiber.Map{
-				"message": "could not login",
-				"token":   token,
-			})
-		}
-		cookie := fiber.Cookie{
-			Name:        "jwt",
-			Value:       token,
-			Expires:     time.Now().Add(time.Hour * 24),
-			HTTPOnly:    true,
-			SessionOnly: true,
-		}
-		c.Cookie(&cookie)
-		return c.JSON(u)
-	}
-
-}
-
-func (h *Handlres) User() fiber.Handler {
-
-	return func(c *fiber.Ctx) error {
 		type request struct {
 			Cookie string `json:"token"`
 		}
-		req := &request{}
-		reader := bytes.NewReader(c.Body())
-		if err := json.NewDecoder(reader).Decode(req); err != nil {
-			h.logger.Warningf("handle user,  error :%e", err)
 
+		req := &request{}
+
+		reader := bytes.NewReader(c.Body())
+
+		if err := json.NewDecoder(reader).Decode(req); err != nil {
+			h.logger.Warningf("handle checkJWT,  error :%e", err)
 		}
+
 		cookie := req.Cookie
-		//_, id, err := middleware.ExtractTokenMetaData(cookie)
+
 		tokenString := cookie
+
 		claims := jwt.MapClaims{}
+
 		_, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 			return []byte("secret"), nil
 		})
-		//expries := int64(claims["exp"].(float64))
+
 		if claims["id"] == nil {
-			h.logger.Warningf("handle user,  error :%e", err)
+			h.logger.Warningf("handle checkJWT,  error :%e", err)
 			return c.JSON(fiber.Map{
 				"message": "token id is nil",
 			})
 		}
+
 		id := float64(claims["id"].(float64))
+
 		u, err := h.pgStore.UserRepository().FindByID(strconv.Itoa(int(id)))
 		if err != nil {
 			return err
@@ -181,14 +160,18 @@ func (h *Handlres) User() fiber.Handler {
 }
 
 func (h *Handlres) Logout() fiber.Handler {
+
 	return func(c *fiber.Ctx) error {
+
 		cookie := fiber.Cookie{
 			Name:     "jwt",
 			Value:    "",
 			Expires:  time.Now().Add(-time.Hour),
 			HTTPOnly: true,
 		}
+
 		c.Cookie(&cookie)
+
 		return c.JSON(fiber.Map{
 			"message": "success",
 		})

@@ -16,13 +16,16 @@ type writerHook struct {
 }
 
 func (hook *writerHook) Fire(entry *logrus.Entry) error {
+
 	line, err := entry.String()
 	if err != nil {
 		return err
 	}
+
 	for _, w := range hook.Writer {
 		w.Write([]byte(line))
 	}
+
 	return err
 }
 
@@ -45,8 +48,11 @@ func (l *Logger) GetLoggerWithField(k string, v interface{}) Logger {
 }
 
 func Init() {
+
 	l := logrus.New()
+
 	l.SetReportCaller(true)
+
 	l.Formatter = &logrus.TextFormatter{
 		CallerPrettyfier: func(frame *runtime.Frame) (function string, file string) {
 			filename := path.Base(frame.File)
@@ -55,6 +61,7 @@ func Init() {
 		DisableColors: false,
 		FullTimestamp: true,
 	}
+
 	err := os.MkdirAll("logs", 0644)
 	if err != nil {
 		panic(err)

@@ -32,6 +32,7 @@ func newServer(pgstore store.PostgresStore, mgstore store.MongoStore, config *Co
 		handlers: handlers.NewHandlres(pgstore, mgstore, log),
 	}
 	s.configureRouter()
+
 	return s
 }
 
@@ -45,9 +46,10 @@ func (s *server) configureRouter() {
 	}))
 	//api := s.router.Group("/api")
 	//api.Use(logger.New())
-	s.router.Post("/api/register", s.handlers.RegisterHandler(), logger.New())
-	s.router.Post("/api/login", s.handlers.FiberLogin(), logger.New())
-	s.router.Post("/api/user", s.handlers.User(), logger.New())
+	s.router.Post("/api/register", s.handlers.Register(), logger.New())
+	s.router.Post("/api/login", s.handlers.Login(), logger.New())
+	s.router.Post("/api/user", s.handlers.CheckJWT(), logger.New())
 	s.router.Post("/api/logout", s.handlers.Logout(), logger.New())
 	s.router.Get("/test", s.handlers.AddProduct(), logger.New())
+
 }

@@ -14,7 +14,7 @@ type Store struct {
 }
 
 func NewMongoDB(client *mongo.Client) *Store {
-	log.Println("Store initialization")
+	log.Println("MongoDB initialization")
 
 	return &Store{
 		client: client,

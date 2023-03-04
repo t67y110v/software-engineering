@@ -15,7 +15,7 @@ type Store struct {
 }
 
 func NewPostgresDB(db *sql.DB) *Store {
-	log.Println("Store initialization")
+	log.Println("PostgreSQL initialization")
 
 	return &Store{
 		db: db,
