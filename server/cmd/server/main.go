@@ -33,7 +33,5 @@ func main() {
 	if err := server.Start(config); err != nil {
 		l.Fatal(err)
 	}
-	//http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
-	//http.HandleFunc("/", homePage)
-	//http.ListenAndServe(":8080", nil)
+
 }
