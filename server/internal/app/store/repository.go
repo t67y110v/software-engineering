@@ -1,13 +1,18 @@
 package store
 
-import model "github.com/t67y110v/software-engineering/internal/app/model/user"
+import (
+	mongoModel "github.com/t67y110v/software-engineering/internal/app/model/product"
+	postgresModel "github.com/t67y110v/software-engineering/internal/app/model/user"
+)
 
 type PostgresStoreRepository interface {
-	Create(*model.User) error
-	FindByEmail(string) (*model.User, error)
-	FindByID(string) (*model.User, error)
+	Create(*postgresModel.User) error
+	FindByEmail(string) (*postgresModel.User, error)
+	FindByID(string) (*postgresModel.User, error)
 }
 
 type MongoStoreRepository interface {
 	GetProduct() error
+	GetAllProducts() ([]*mongoModel.Product, error)
+	Filter(filter string) ([]*mongoModel.Product, error)
 }

@@ -20,7 +20,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-func (h *Handlres) Register() fiber.Handler {
+func (h *Handlers) Register() fiber.Handler {
 
 	return func(c *fiber.Ctx) error {
 
@@ -58,7 +58,7 @@ func (h *Handlres) Register() fiber.Handler {
 
 }
 
-func (h *Handlres) Login() fiber.Handler {
+func (h *Handlers) Login() fiber.Handler {
 
 	return func(c *fiber.Ctx) error {
 
@@ -113,7 +113,7 @@ func (h *Handlres) Login() fiber.Handler {
 
 }
 
-func (h *Handlres) CheckJWT() fiber.Handler {
+func (h *Handlers) CheckJWT() fiber.Handler {
 
 	return func(c *fiber.Ctx) error {
 
@@ -159,7 +159,7 @@ func (h *Handlres) CheckJWT() fiber.Handler {
 
 }
 
-func (h *Handlres) Logout() fiber.Handler {
+func (h *Handlers) Logout() fiber.Handler {
 
 	return func(c *fiber.Ctx) error {
 

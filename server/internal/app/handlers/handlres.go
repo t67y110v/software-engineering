@@ -5,14 +5,14 @@ import (
 	"github.com/t67y110v/software-engineering/internal/app/store"
 )
 
-type Handlres struct {
+type Handlers struct {
 	logger  logging.Logger
 	pgStore store.PostgresStore
 	mgStore store.MongoStore
 }
 
-func NewHandlres(pgstore store.PostgresStore, mgstore store.MongoStore, logger logging.Logger) *Handlres {
-	return &Handlres{
+func NewHandlers(pgstore store.PostgresStore, mgstore store.MongoStore, logger logging.Logger) *Handlers {
+	return &Handlers{
 		pgStore: pgstore,
 		mgStore: mgstore,
 		logger:  logger,

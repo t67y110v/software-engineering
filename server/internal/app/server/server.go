@@ -20,7 +20,7 @@ type server struct {
 	pgStore  store.PostgresStore
 	mgStore  store.MongoStore
 	config   *Config
-	handlers *handlers.Handlres
+	handlers *handlers.Handlers
 }
 
 func newServer(pgstore store.PostgresStore, mgstore store.MongoStore, config *Config, log logging.Logger) *server {
@@ -28,8 +28,9 @@ func newServer(pgstore store.PostgresStore, mgstore store.MongoStore, config *Co
 		router:   fiber.New(fiber.Config{ServerHeader: "software engineering course api", AppName: "Api v1.0.1"}),
 		logger:   log,
 		pgStore:  pgstore,
+		mgStore:  mgstore,
 		config:   config,
-		handlers: handlers.NewHandlres(pgstore, mgstore, log),
+		handlers: handlers.NewHandlers(pgstore, mgstore, log),
 	}
 	s.configureRouter()
 
@@ -46,10 +47,22 @@ func (s *server) configureRouter() {
 	}))
 	//api := s.router.Group("/api")
 	//api.Use(logger.New())
-	s.router.Post("/api/register", s.handlers.Register(), logger.New())
-	s.router.Post("/api/login", s.handlers.Login(), logger.New())
-	s.router.Post("/api/user", s.handlers.CheckJWT(), logger.New())
-	s.router.Post("/api/logout", s.handlers.Logout(), logger.New())
-	s.router.Get("/test", s.handlers.AddProduct(), logger.New())
+
+	///////// USER GROUP ///////////////
+	////////////////////////////////////
+	user := s.router.Group("/user")
+	user.Use(logger.New())
+	user.Post("/api/register", s.handlers.Register())
+	user.Post("/api/login", s.handlers.Login())
+	user.Post("/api/user", s.handlers.CheckJWT())
+	//////////////////////////////////////
+
+	//////// PRODUCT GRUOP ////////////
+	///////////////////////////////////
+	product := s.router.Group("/product")
+	product.Use(logger.New())
+	product.Get("/", s.handlers.AddProduct())
+	product.Get("/all", s.handlers.GetAllProducts())
+	////////////////////////////////////
 
 }
