@@ -3,7 +3,7 @@ package store
 import (
 	"database/sql"
 
-	"github.com/t67y110v/software-engineering/internal/app/model"
+	model "github.com/t67y110v/software-engineering/internal/app/model/user"
 	"github.com/t67y110v/software-engineering/internal/app/store"
 )
 

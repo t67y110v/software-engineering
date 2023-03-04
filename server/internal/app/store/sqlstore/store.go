@@ -14,7 +14,7 @@ type Store struct {
 	postgresStoreRepository *PostgresStoreRepository
 }
 
-func New(db *sql.DB) *Store {
+func NewPostgresDB(db *sql.DB) *Store {
 	log.Println("Store initialization")
 
 	return &Store{

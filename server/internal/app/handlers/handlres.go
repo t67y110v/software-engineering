@@ -6,13 +6,15 @@ import (
 )
 
 type Handlres struct {
-	logger logging.Logger
-	store  store.PostgresStore
+	logger  logging.Logger
+	pgStore store.PostgresStore
+	mgStore store.MongoStore
 }
 
-func NewHandlres(store store.PostgresStore, logger logging.Logger) *Handlres {
+func NewHandlres(pgstore store.PostgresStore, mgstore store.MongoStore, logger logging.Logger) *Handlres {
 	return &Handlres{
-		store:  store,
-		logger: logger,
+		pgStore: pgstore,
+		mgStore: mgstore,
+		logger:  logger,
 	}
 }

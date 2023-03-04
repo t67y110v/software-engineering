@@ -17,11 +17,6 @@ func init() {
 	flag.StringVar(&configPath, "config-path", "configs/configs.toml", "path to config file")
 }
 
-type User struct {
-	Name string
-	Age  int
-}
-
 func main() {
 
 	logging.Init()

@@ -1,4 +1,6 @@
 bind_addr=":4000"
 log_level="debug"
 
-database_url="user=postgres password=p02tgre2 dbname=web sslmode=disable"
+postgres_database_url="user=postgres password=p02tgre2 dbname=web sslmode=disable"
+
+mongo_database_url="mongodb://localhost:27017/"

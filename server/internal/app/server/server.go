@@ -17,18 +17,19 @@ import (
 type server struct {
 	router   *fiber.App
 	logger   logging.Logger
-	store    store.PostgresStore
+	pgStore  store.PostgresStore
+	mgStore  store.MongoStore
 	config   *Config
 	handlers *handlers.Handlres
 }
 
-func newServer(store store.PostgresStore, config *Config, log logging.Logger) *server {
+func newServer(pgstore store.PostgresStore, mgstore store.MongoStore, config *Config, log logging.Logger) *server {
 	s := &server{
 		router:   fiber.New(fiber.Config{ServerHeader: "software engineering course api", AppName: "Api v1.0.1"}),
 		logger:   log,
-		store:    store,
+		pgStore:  pgstore,
 		config:   config,
-		handlers: handlers.NewHandlres(store, log),
+		handlers: handlers.NewHandlres(pgstore, mgstore, log),
 	}
 	s.configureRouter()
 	return s
@@ -48,5 +49,5 @@ func (s *server) configureRouter() {
 	s.router.Post("/api/login", s.handlers.FiberLogin(), logger.New())
 	s.router.Post("/api/user", s.handlers.User(), logger.New())
 	s.router.Post("/api/logout", s.handlers.Logout(), logger.New())
-
+	s.router.Get("/test", s.handlers.AddProduct(), logger.New())
 }
