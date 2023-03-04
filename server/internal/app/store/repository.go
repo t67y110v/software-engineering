@@ -12,7 +12,8 @@ type PostgresStoreRepository interface {
 }
 
 type MongoStoreRepository interface {
-	GetProduct() error
+	AddProduct(name, category, imgPath, description string, price, discount int) error
 	GetAllProducts() ([]*mongoModel.Product, error)
-	Filter(filter string) ([]*mongoModel.Product, error)
+	FilterByCategory(filter string) ([]*mongoModel.Product, error)
+	DeleteProduct(value string) error
 }

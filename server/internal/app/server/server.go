@@ -61,8 +61,11 @@ func (s *server) configureRouter() {
 	///////////////////////////////////
 	product := s.router.Group("/product")
 	product.Use(logger.New())
-	product.Get("/", s.handlers.AddProduct())
+	product.Post("/add", s.handlers.AddProduct())
 	product.Get("/all", s.handlers.GetAllProducts())
+	product.Post("/filter", s.handlers.FilterByCategory())
+	product.Post("/delete", s.handlers.DeleteProduct())
+
 	////////////////////////////////////
 
 }

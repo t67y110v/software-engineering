@@ -2,6 +2,7 @@ package nosqlstore
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	model "github.com/t67y110v/software-engineering/internal/app/model/product"
@@ -14,7 +15,7 @@ type MongoStoreRepository struct {
 	store *Store
 }
 
-func (r *MongoStoreRepository) GetProduct() error {
+func (r *MongoStoreRepository) AddProduct(name, category, imgPath, description string, price, discount int) error {
 
 	ctx := context.TODO()
 
@@ -24,12 +25,12 @@ func (r *MongoStoreRepository) GetProduct() error {
 		ID:                 primitive.NewObjectID(),
 		CreatedAt:          time.Now(),
 		UpdatedAt:          time.Now(),
-		ProductName:        "api test2",
-		ProductCategory:    "tasty",
-		ProductImgPath:     "test/path//1",
-		ProductPrice:       123,
-		ProductDiscount:    12,
-		ProductDescription: "description very interesting ",
+		ProductName:        name,
+		ProductCategory:    category,
+		ProductImgPath:     imgPath,
+		ProductPrice:       price,
+		ProductDiscount:    discount,
+		ProductDescription: description,
 	}
 
 	_, err := collection.InsertOne(ctx, product)
@@ -73,7 +74,7 @@ func (r *MongoStoreRepository) GetAllProducts() ([]*model.Product, error) {
 
 }
 
-func (r MongoStoreRepository) Filter(category string) ([]*model.Product, error) {
+func (r MongoStoreRepository) FilterByCategory(category string) ([]*model.Product, error) {
 	filter := bson.D{
 		primitive.E{
 			Key:   "product_category",
@@ -107,5 +108,26 @@ func (r MongoStoreRepository) Filter(category string) ([]*model.Product, error) 
 
 	}
 	return products, nil
+
+}
+
+func (r MongoStoreRepository) DeleteProduct(value string) error {
+	ctx := context.TODO()
+	filter := bson.D{primitive.E{
+		Key:   "product_name",
+		Value: value,
+	}}
+
+	collection := r.store.client.Database("web").Collection("products")
+
+	res, err := collection.DeleteOne(ctx, filter)
+
+	if err != nil {
+		return err
+	}
+	if res.DeletedCount == 0 {
+		return errors.New("No products were deleted")
+	}
+	return nil
 
 }
