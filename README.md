@@ -41,5 +41,6 @@
 ## Backend 
 - [Go](https://go.dev)
 - [PostgreSQL](https://www.postgresql.org)
+- [MongoDB](https://www.mongodb.com)
 - [Docker](https://www.docker.com/)
 - [Fiber](https://github.com/gofiber/fiber)
