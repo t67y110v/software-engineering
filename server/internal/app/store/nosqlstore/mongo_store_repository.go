@@ -74,7 +74,7 @@ func (r *MongoStoreRepository) GetAllProducts() ([]*model.Product, error) {
 
 }
 
-func (r MongoStoreRepository) FilterByCategory(category string) ([]*model.Product, error) {
+func (r *MongoStoreRepository) FilterByCategory(category string) ([]*model.Product, error) {
 	filter := bson.D{
 		primitive.E{
 			Key:   "product_category",
@@ -111,7 +111,7 @@ func (r MongoStoreRepository) FilterByCategory(category string) ([]*model.Produc
 
 }
 
-func (r MongoStoreRepository) DeleteProduct(value string) error {
+func (r *MongoStoreRepository) DeleteProduct(value string) error {
 	ctx := context.TODO()
 	filter := bson.D{primitive.E{
 		Key:   "product_name",
@@ -126,8 +126,61 @@ func (r MongoStoreRepository) DeleteProduct(value string) error {
 		return err
 	}
 	if res.DeletedCount == 0 {
-		return errors.New("No products were deleted")
+		return errors.New("no products were deleted")
 	}
 	return nil
+
+}
+
+func (r *MongoStoreRepository) AddToCart(userId string, productName string) error {
+	ctx := context.TODO()
+
+	collection := r.store.client.Database("web").Collection("cart")
+
+	newItem := bson.D{
+		{
+			Key:   userId,
+			Value: productName,
+		},
+	}
+
+	_, err := collection.InsertOne(ctx, newItem)
+	if err != nil {
+		return err
+	}
+
+	return nil
+
+}
+
+func (r *MongoStoreRepository) GetCart(userId string) ([]*model.Cart, error) {
+	filter := bson.D{{}}
+	ctx := context.TODO()
+	collection := r.store.client.Database("web").Collection("products")
+
+	cur, err := collection.Find(ctx, filter)
+
+	var products []*model.Product
+
+	if err != nil {
+		return nil, err
+	}
+	for cur.Next(ctx) {
+		var p model.Product
+		err := cur.Decode(&p)
+		if err != nil {
+			return nil, err
+		}
+		products = append(products, &p)
+	}
+	if err := cur.Err(); err != nil {
+		return products, err
+	}
+	cur.Close(ctx)
+	if len(products) == 0 {
+		return products, mongo.ErrNoDocuments
+
+	}
+	return products, nil
 
 }
