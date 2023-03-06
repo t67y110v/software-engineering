@@ -55,20 +55,9 @@ func (h *Handlers) GetAllProducts() fiber.Handler {
 
 func (h *Handlers) FilterByCategory() fiber.Handler {
 	return func(c *fiber.Ctx) error {
+		category := c.Params("category")
 
-		type request struct {
-			Category string `json:"category"`
-		}
-
-		req := &request{}
-
-		reader := bytes.NewReader(c.Body())
-
-		if err := json.NewDecoder(reader).Decode(req); err != nil {
-			h.logger.Warningf("handle filter by category, status :%d, error :%e", fiber.StatusBadRequest, err)
-		}
-
-		products, err := h.mgStore.ProductRepository().FilterByCategory(req.Category)
+		products, err := h.mgStore.ProductRepository().FilterByCategory(category)
 		if err != nil {
 			return err
 		}

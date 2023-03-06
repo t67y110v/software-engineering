@@ -16,4 +16,8 @@ type MongoStoreRepository interface {
 	GetAllProducts() ([]*mongoModel.Product, error)
 	FilterByCategory(filter string) ([]*mongoModel.Product, error)
 	DeleteProduct(value string) error
+	AddToCart(userId string, productName string) error
+	GetCart(userId string) ([]*mongoModel.Product, error)
+	DeleteFromCart(userId, productName string) error
+	ClearCart(userId string) error
 }

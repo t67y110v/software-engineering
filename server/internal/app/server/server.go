@@ -63,9 +63,17 @@ func (s *server) configureRouter() {
 	product.Use(logger.New())
 	product.Post("/add", s.handlers.AddProduct())
 	product.Get("/all", s.handlers.GetAllProducts())
-	product.Post("/filter", s.handlers.FilterByCategory())
-	product.Post("/delete", s.handlers.DeleteProduct())
+	product.Get("/filter/:category", s.handlers.FilterByCategory())
+	product.Delete("/delete", s.handlers.DeleteProduct())
 
 	////////////////////////////////////
 
+	//////////// CART GROUP /////////////
+	/////////////////////////////////////
+	cart := s.router.Group("/cart")
+	cart.Use(logger.New())
+	cart.Post("/add", s.handlers.AddToCart())
+	cart.Get("/get/:user_id", s.handlers.GetCart())
+	cart.Delete("/delete", s.handlers.DeleteFromCart())
+	cart.Delete("/clear", s.handlers.ClearCart())
 }
