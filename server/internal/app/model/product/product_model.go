@@ -1,6 +1,7 @@
 package model
 
 import (
+	"testing"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -16,6 +17,20 @@ type Product struct {
 	ProductPrice       int                `bson:"product_price"`
 	ProductDiscount    int                `bson:"product_discount"`
 	ProductDescription string             `bson:"product_desccription"`
+}
+
+func TestProduct(t *testing.T) *Product {
+	return &Product{
+
+		CreatedAt:          time.Now(),
+		UpdatedAt:          time.Now(),
+		ProductName:        "test product name",
+		ProductCategory:    "meet",
+		ProductImgPath:     "src/img1.jpg",
+		ProductPrice:       100,
+		ProductDiscount:    0,
+		ProductDescription: "very tasty food ",
+	}
 }
 
 /*

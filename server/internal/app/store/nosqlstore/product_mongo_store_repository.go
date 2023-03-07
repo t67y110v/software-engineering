@@ -137,11 +137,11 @@ func (r *MongoStoreRepository) GetProductByName(productName string) (*model.Prod
 
 }
 
-func (r *MongoStoreRepository) DeleteProduct(value string) error {
+func (r *MongoStoreRepository) DeleteProduct(productName string) error {
 	ctx := context.TODO()
 	filter := bson.D{primitive.E{
 		Key:   "product_name",
-		Value: value,
+		Value: productName,
 	}}
 
 	collection := r.store.client.Database("web").Collection("products")
