@@ -5,7 +5,7 @@ import (
 )
 
 func (r *MongoStoreRepository) AddToCart(userId string, productName string) error {
-	r.carts[len(r.carts)] = nil
+	_ = r.carts[len(r.carts)]
 	r.carts[len(r.carts)].UserId = userId
 	r.carts[len(r.carts)].ProductName = append(r.carts[len(r.carts)].ProductName, productName)
 	return nil
