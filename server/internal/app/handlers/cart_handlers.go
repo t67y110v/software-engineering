@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/t67y110v/software-engineering/internal/app/handlers/requests"
 )
 
 // @Summary Gets users cart
@@ -48,12 +49,7 @@ func (h *Handlers) AddToCart() fiber.Handler {
 
 	return func(c *fiber.Ctx) error {
 
-		type request struct {
-			UserId  string `json:"user_id"`
-			Product string `json:"product_name"`
-		}
-
-		req := &request{}
+		req := &requests.AddToCart{}
 
 		reader := bytes.NewReader(c.Body())
 
@@ -89,12 +85,8 @@ func (h *Handlers) AddToCart() fiber.Handler {
 // @Router /cart/delete [delete]
 func (h *Handlers) DeleteFromCart() fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		type request struct {
-			UserId  string `json:"user_id"`
-			Product string `json:"product_name"`
-		}
 
-		req := &request{}
+		req := &requests.AddToCart{}
 
 		reader := bytes.NewReader(c.Body())
 
@@ -126,11 +118,8 @@ func (h *Handlers) DeleteFromCart() fiber.Handler {
 // @Router /cart/clear [delete]
 func (h *Handlers) ClearCart() fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		type request struct {
-			UserId string `json:"user_id"`
-		}
 
-		req := &request{}
+		req := &requests.Clear{}
 
 		reader := bytes.NewReader(c.Body())
 

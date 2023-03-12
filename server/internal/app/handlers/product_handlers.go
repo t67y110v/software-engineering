@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/t67y110v/software-engineering/internal/app/handlers/requests"
 )
 
 // @Summary Add product
@@ -21,16 +22,8 @@ import (
 // @Router /product/add [post]
 func (h *Handlers) AddProduct() fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		type request struct {
-			ProductName        string `bson:"product_name"`
-			ProductCategory    string `bson:"product_category"`
-			ProductImgPath     string `bson:"product_img_path"`
-			ProductPrice       int    `bson:"product_price"`
-			ProductDiscount    int    `bson:"product_discount"`
-			ProductDescription string `bson:"product_desccription"`
-		}
 
-		req := &request{}
+		req := &requests.AddProduct{}
 
 		reader := bytes.NewReader(c.Body())
 
@@ -115,11 +108,8 @@ func (h *Handlers) FilterByCategory() fiber.Handler {
 // @Router /product/delete [delete]
 func (h *Handlers) DeleteProduct() fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		type request struct {
-			Value string `json:"value"`
-		}
 
-		req := &request{}
+		req := &requests.Delete{}
 		reader := bytes.NewReader(c.Body())
 		if err := json.NewDecoder(reader).Decode(req); err != nil {
 			h.logger.Warningf("handle filter by category, status :%d, error :%e", fiber.StatusBadRequest, err)

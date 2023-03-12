@@ -15,6 +15,7 @@ import (
 
 	"time"
 
+	"github.com/t67y110v/software-engineering/internal/app/handlers/requests"
 	model "github.com/t67y110v/software-engineering/internal/app/model/user"
 
 	"github.com/gofiber/fiber/v2"
@@ -37,14 +38,7 @@ func (h *Handlers) Register() fiber.Handler {
 
 	return func(c *fiber.Ctx) error {
 
-		type request struct {
-			Email       string `json:"email"`
-			Password    string `json:"password"`
-			Name        string `json:"name"`
-			SeccondName string `json:"seccond_name"`
-		}
-
-		req := &request{}
+		req := &requests.Registration{}
 
 		reader := bytes.NewReader(c.Body())
 
@@ -87,12 +81,7 @@ func (h *Handlers) Login() fiber.Handler {
 
 	return func(c *fiber.Ctx) error {
 
-		type request struct {
-			Email    string `json:"email"`
-			Password string `json:"password"`
-		}
-
-		req := &request{}
+		req := &requests.Login{}
 
 		reader := bytes.NewReader(c.Body())
 
@@ -154,11 +143,7 @@ func (h *Handlers) CheckJWT() fiber.Handler {
 
 	return func(c *fiber.Ctx) error {
 
-		type request struct {
-			Cookie string `json:"token"`
-		}
-
-		req := &request{}
+		req := &requests.CheckToken{}
 
 		reader := bytes.NewReader(c.Body())
 
