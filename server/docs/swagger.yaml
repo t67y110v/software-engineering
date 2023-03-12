@@ -1,0 +1,441 @@
+basePath: /
+definitions:
+  requests.AddProduct:
+    properties:
+      productCategory:
+        type: string
+      productDescription:
+        type: string
+      productDiscount:
+        type: integer
+      productImgPath:
+        type: string
+      productName:
+        type: string
+      productPrice:
+        type: integer
+    type: object
+  requests.AddToCart:
+    properties:
+      product_name:
+        type: string
+      user_id:
+        type: string
+    type: object
+  requests.CheckToken:
+    properties:
+      token:
+        type: string
+    type: object
+  requests.Clear:
+    properties:
+      user_id:
+        type: string
+    type: object
+  requests.Delete:
+    properties:
+      value:
+        type: string
+    type: object
+  requests.Login:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  requests.Registration:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      seccond_name:
+        type: string
+    type: object
+  responses.AllProducts:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      productCategory:
+        type: string
+      productDescription:
+        type: string
+      productDiscount:
+        type: integer
+      productImgPath:
+        type: string
+      productName:
+        type: string
+      productPrice:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  responses.Error:
+    properties:
+      message:
+        type: string
+    type: object
+  responses.Login:
+    properties:
+      Email:
+        type: string
+      Name:
+        type: string
+      token:
+        type: string
+    type: object
+  responses.Registration:
+    properties:
+      Email:
+        type: string
+      ID:
+        type: integer
+      Isadmin:
+        type: boolean
+      Name:
+        type: string
+      Password:
+        type: string
+      SeccondName:
+        type: string
+    type: object
+  responses.Success:
+    properties:
+      result:
+        type: string
+    type: object
+host: localhost:4000
+info:
+  contact: {}
+  description: This API have endpoints for food delivery site
+  title: Food Delivery API
+  version: "1.0"
+paths:
+  /cart/add:
+    post:
+      consumes:
+      - application/json
+      description: Add product to users cart
+      parameters:
+      - description: Add to cart
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/requests.AddToCart'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.AllProducts'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Error'
+      summary: Add to cart
+      tags:
+      - Cart
+  /cart/clear:
+    delete:
+      consumes:
+      - application/json
+      description: Delete all product form users cart
+      parameters:
+      - description: Delete  all from cart
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/requests.Clear'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.Success'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Error'
+      summary: Clear cart
+      tags:
+      - Cart
+  /cart/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete product form users cart
+      parameters:
+      - description: Delete from cart
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/requests.AddToCart'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.Success'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Error'
+      summary: Delete from cart
+      tags:
+      - Cart
+  /cart/get/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: Getting users card by user_id
+      parameters:
+      - description: User_id
+        in: path
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.AllProducts'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Error'
+      summary: Gets users cart
+      tags:
+      - Cart
+  /product/add:
+    post:
+      consumes:
+      - application/json
+      description: Adding new product in the system
+      parameters:
+      - description: 'Add product '
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/requests.AddProduct'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.Success'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Error'
+      summary: Add product
+      tags:
+      - Products
+  /product/all:
+    get:
+      consumes:
+      - application/json
+      description: Getting all products
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.AllProducts'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Error'
+      summary: Get all products
+      tags:
+      - Products
+  /product/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Deleting product by name
+      parameters:
+      - description: 'Delete product '
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/requests.Delete'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.Success'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Error'
+      summary: Delete product
+      tags:
+      - Products
+  /product/filter/{category}:
+    get:
+      consumes:
+      - application/json
+      description: Getting all products in the same categorys
+      parameters:
+      - description: Category
+        in: path
+        name: category
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.AllProducts'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Error'
+      summary: Filter products by category
+      tags:
+      - Products
+  /user/check:
+    post:
+      consumes:
+      - application/json
+      description: Validation user token
+      parameters:
+      - description: Check token
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CheckToken'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.Login'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Error'
+      summary: Check session
+      tags:
+      - User
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: authentification user in the system
+      parameters:
+      - description: login
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/requests.Login'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.Login'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Error'
+      summary: User Login
+      tags:
+      - User
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: registration of user
+      parameters:
+      - description: registration
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/requests.Registration'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.Registration'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Error'
+      summary: User Registration
+      tags:
+      - User
+swagger: "2.0"

@@ -17,6 +17,13 @@ func init() {
 	flag.StringVar(&configPath, "config-path", "configs/configs.toml", "path to config file")
 }
 
+// @title Food Delivery API
+// @version 1.0
+// @description This API have endpoints for food delivery site
+
+// @host localhost:4000
+// @BasePath /
+
 func main() {
 
 	logging.Init()

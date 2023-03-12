@@ -4,14 +4,15 @@ import (
 	//"html/template"
 	"net/http"
 
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	_ "github.com/t67y110v/software-engineering/docs"
 	"github.com/t67y110v/software-engineering/internal/app/handlers"
 	"github.com/t67y110v/software-engineering/internal/app/logging"
 	"github.com/t67y110v/software-engineering/internal/app/store"
 
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
-
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/swagger" // swagger handler
 )
 
 type server struct {
@@ -47,14 +48,17 @@ func (s *server) configureRouter() {
 	}))
 	//api := s.router.Group("/api")
 	//api.Use(logger.New())
+	// localhost:4000/user/register
+
+	s.router.Get("/swagger/*", swagger.HandlerDefault)
 
 	///////// USER GROUP ///////////////
 	////////////////////////////////////
 	user := s.router.Group("/user")
 	user.Use(logger.New())
-	user.Post("/api/register", s.handlers.Register())
-	user.Post("/api/login", s.handlers.Login())
-	user.Post("/api/user", s.handlers.CheckJWT())
+	user.Post("/register", s.handlers.Register())
+	user.Post("/login", s.handlers.Login())
+	user.Post("/check", s.handlers.CheckJWT())
 	//////////////////////////////////////
 
 	//////// PRODUCT GRUOP ////////////

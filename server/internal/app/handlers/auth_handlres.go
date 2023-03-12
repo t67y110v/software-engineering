@@ -4,6 +4,7 @@ import (
 	//"html/template"
 
 	"bytes"
+	"log"
 
 	//"fmt"
 	"strconv"
@@ -20,6 +21,18 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
+// @Summary User Registration
+// @Description registration of user
+// @Tags         User
+//
+//	@Accept       json
+//
+// @Produce json
+// @Param  data body requests.Registration  true "registration"
+// @Success 200 {object} responses.Registration
+// @Failure 400 {object} responses.Error
+// @Failure 500 {object} responses.Error
+// @Router /user/register [post]
 func (h *Handlers) Register() fiber.Handler {
 
 	return func(c *fiber.Ctx) error {
@@ -38,7 +51,7 @@ func (h *Handlers) Register() fiber.Handler {
 		if err := json.NewDecoder(reader).Decode(req); err != nil {
 			h.logger.Warningf("handle register, status :%d, error :%e", fiber.StatusBadRequest, err)
 		}
-
+		log.Println(req)
 		u := &model.User{
 			Email:       req.Email,
 			Password:    req.Password,
@@ -58,6 +71,18 @@ func (h *Handlers) Register() fiber.Handler {
 
 }
 
+// @Summary User Login
+// @Description authentification user in the system
+// @Tags         User
+//
+//	@Accept       json
+//
+// @Produce json
+// @Param  data body requests.Login true  "login"
+// @Success 200 {object} responses.Login
+// @Failure 400 {object} responses.Error
+// @Failure 500 {object} responses.Error
+// @Router /user/login [post]
 func (h *Handlers) Login() fiber.Handler {
 
 	return func(c *fiber.Ctx) error {
@@ -113,6 +138,18 @@ func (h *Handlers) Login() fiber.Handler {
 
 }
 
+// @Summary Check session
+// @Description Validation user token
+// @Tags         User
+//
+//	@Accept       json
+//
+// @Produce json
+// @Param  data body requests.CheckToken true  "Check token"
+// @Success 200 {object} responses.Login
+// @Failure 400 {object} responses.Error
+// @Failure 500 {object} responses.Error
+// @Router /user/check [post]
 func (h *Handlers) CheckJWT() fiber.Handler {
 
 	return func(c *fiber.Ctx) error {
