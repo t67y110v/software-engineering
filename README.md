@@ -44,3 +44,4 @@
 - [MongoDB](https://www.mongodb.com)
 - [Docker](https://www.docker.com/)
 - [Fiber](https://github.com/gofiber/fiber)
+- [Swagger](https://swagger.io/)
