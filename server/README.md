@@ -1,19 +1,8 @@
 
-## Endpoints
+## http://localhost:4000/swagger/index.html#/
 
-| Method | Name | Description |
-|------|-------------|----------|
-|POST| **/api/register** | Registration of new user |
-|POST| **/api/login** | authorization of user |
-|POST| **/api/user** | middleware method for checking users jwt|
+### Swagger api documentation
 
-
-
-## MODELS
-|Method|params|params|params|params|
-|--|--|--|--|--|
-| /register | "email" | "password" | "name"| "seccond_name" |
-| /login | "email" | "password"|
-| /user | "token" |
+![image](https://user-images.githubusercontent.com/46971653/224574790-97b9675a-f08a-4163-9e14-cb39a0188149.png)
 
 
